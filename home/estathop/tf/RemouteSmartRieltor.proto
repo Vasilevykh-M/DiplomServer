@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package example;
+
+service EnginerService{
+  rpc postModel(Model) returns (Response) {}
+  rpc postStat(Stat) returns (Response) {}
+  rpc getData(stream IntervalDate) returns (File) {}
+}
+
+service ClientService
+{
+  rpc postData(File) returns (Response) {}
+  rpc getPredict(File) returns (Predict) {}
+}
+
+message Response {
+  int32 code = 1;
+}
+
+message File
+{
+  bytes file = 1;
+}
+
+message Model
+{
+  int32 idModel = 1;
+  bytes file = 2;
+}
+
+message Stat
+{
+  bytes stat = 1;
+}
+
+message Predict
+{
+  bytes predict = 1;
+}
+
+message IntervalDate
+{
+  string start_date = 1;
+  string end_date = 2; 
+}
