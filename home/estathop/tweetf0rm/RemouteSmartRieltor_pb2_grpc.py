@@ -5,7 +5,7 @@ import grpc
 import RemouteSmartRieltor_pb2 as RemouteSmartRieltor__pb2
 
 
-class EnginerServiceStub(object):
+class EngineerServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -14,27 +14,43 @@ class EnginerServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.postModel = channel.unary_unary(
-                '/example.EnginerService/postModel',
-                request_serializer=RemouteSmartRieltor__pb2.Model.SerializeToString,
+        self.postData = channel.stream_unary(
+                '/example.EngineerService/postData',
+                request_serializer=RemouteSmartRieltor__pb2.Data.SerializeToString,
                 response_deserializer=RemouteSmartRieltor__pb2.Response.FromString,
                 )
+        self.getData = channel.unary_stream(
+                '/example.EngineerService/getData',
+                request_serializer=RemouteSmartRieltor__pb2.Response.SerializeToString,
+                response_deserializer=RemouteSmartRieltor__pb2.Data.FromString,
+                )
         self.postStat = channel.unary_unary(
-                '/example.EnginerService/postStat',
+                '/example.EngineerService/postStat',
                 request_serializer=RemouteSmartRieltor__pb2.Stat.SerializeToString,
                 response_deserializer=RemouteSmartRieltor__pb2.Response.FromString,
                 )
-        self.getData = channel.stream_unary(
-                '/example.EnginerService/getData',
-                request_serializer=RemouteSmartRieltor__pb2.IntervalDate.SerializeToString,
-                response_deserializer=RemouteSmartRieltor__pb2.File.FromString,
+        self.postTorchModel = channel.unary_unary(
+                '/example.EngineerService/postTorchModel',
+                request_serializer=RemouteSmartRieltor__pb2.TorchModel.SerializeToString,
+                response_deserializer=RemouteSmartRieltor__pb2.Response.FromString,
+                )
+        self.postCatBoostModel = channel.unary_unary(
+                '/example.EngineerService/postCatBoostModel',
+                request_serializer=RemouteSmartRieltor__pb2.CatBoostModel.SerializeToString,
+                response_deserializer=RemouteSmartRieltor__pb2.Response.FromString,
                 )
 
 
-class EnginerServiceServicer(object):
+class EngineerServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def postModel(self, request, context):
+    def postData(self, request_iterator, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def getData(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -46,42 +62,58 @@ class EnginerServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def getData(self, request_iterator, context):
+    def postTorchModel(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def postCatBoostModel(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_EnginerServiceServicer_to_server(servicer, server):
+def add_EngineerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'postModel': grpc.unary_unary_rpc_method_handler(
-                    servicer.postModel,
-                    request_deserializer=RemouteSmartRieltor__pb2.Model.FromString,
+            'postData': grpc.stream_unary_rpc_method_handler(
+                    servicer.postData,
+                    request_deserializer=RemouteSmartRieltor__pb2.Data.FromString,
                     response_serializer=RemouteSmartRieltor__pb2.Response.SerializeToString,
+            ),
+            'getData': grpc.unary_stream_rpc_method_handler(
+                    servicer.getData,
+                    request_deserializer=RemouteSmartRieltor__pb2.Response.FromString,
+                    response_serializer=RemouteSmartRieltor__pb2.Data.SerializeToString,
             ),
             'postStat': grpc.unary_unary_rpc_method_handler(
                     servicer.postStat,
                     request_deserializer=RemouteSmartRieltor__pb2.Stat.FromString,
                     response_serializer=RemouteSmartRieltor__pb2.Response.SerializeToString,
             ),
-            'getData': grpc.stream_unary_rpc_method_handler(
-                    servicer.getData,
-                    request_deserializer=RemouteSmartRieltor__pb2.IntervalDate.FromString,
-                    response_serializer=RemouteSmartRieltor__pb2.File.SerializeToString,
+            'postTorchModel': grpc.unary_unary_rpc_method_handler(
+                    servicer.postTorchModel,
+                    request_deserializer=RemouteSmartRieltor__pb2.TorchModel.FromString,
+                    response_serializer=RemouteSmartRieltor__pb2.Response.SerializeToString,
+            ),
+            'postCatBoostModel': grpc.unary_unary_rpc_method_handler(
+                    servicer.postCatBoostModel,
+                    request_deserializer=RemouteSmartRieltor__pb2.CatBoostModel.FromString,
+                    response_serializer=RemouteSmartRieltor__pb2.Response.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'example.EnginerService', rpc_method_handlers)
+            'example.EngineerService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class EnginerService(object):
+class EngineerService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def postModel(request,
+    def postData(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -91,9 +123,26 @@ class EnginerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/example.EnginerService/postModel',
-            RemouteSmartRieltor__pb2.Model.SerializeToString,
+        return grpc.experimental.stream_unary(request_iterator, target, '/example.EngineerService/postData',
+            RemouteSmartRieltor__pb2.Data.SerializeToString,
             RemouteSmartRieltor__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def getData(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/example.EngineerService/getData',
+            RemouteSmartRieltor__pb2.Response.SerializeToString,
+            RemouteSmartRieltor__pb2.Data.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -108,14 +157,14 @@ class EnginerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/example.EnginerService/postStat',
+        return grpc.experimental.unary_unary(request, target, '/example.EngineerService/postStat',
             RemouteSmartRieltor__pb2.Stat.SerializeToString,
             RemouteSmartRieltor__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def getData(request_iterator,
+    def postTorchModel(request,
             target,
             options=(),
             channel_credentials=None,
@@ -125,9 +174,26 @@ class EnginerService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/example.EnginerService/getData',
-            RemouteSmartRieltor__pb2.IntervalDate.SerializeToString,
-            RemouteSmartRieltor__pb2.File.FromString,
+        return grpc.experimental.unary_unary(request, target, '/example.EngineerService/postTorchModel',
+            RemouteSmartRieltor__pb2.TorchModel.SerializeToString,
+            RemouteSmartRieltor__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def postCatBoostModel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/example.EngineerService/postCatBoostModel',
+            RemouteSmartRieltor__pb2.CatBoostModel.SerializeToString,
+            RemouteSmartRieltor__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -141,28 +207,28 @@ class ClientServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.postData = channel.unary_unary(
+        self.postData = channel.stream_unary(
                 '/example.ClientService/postData',
-                request_serializer=RemouteSmartRieltor__pb2.File.SerializeToString,
+                request_serializer=RemouteSmartRieltor__pb2.Data.SerializeToString,
                 response_deserializer=RemouteSmartRieltor__pb2.Response.FromString,
                 )
-        self.getPredict = channel.unary_unary(
+        self.getPredict = channel.stream_stream(
                 '/example.ClientService/getPredict',
-                request_serializer=RemouteSmartRieltor__pb2.File.SerializeToString,
-                response_deserializer=RemouteSmartRieltor__pb2.Predict.FromString,
+                request_serializer=RemouteSmartRieltor__pb2.Booking.SerializeToString,
+                response_deserializer=RemouteSmartRieltor__pb2.StateBooking.FromString,
                 )
 
 
 class ClientServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def postData(self, request, context):
+    def postData(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def getPredict(self, request, context):
+    def getPredict(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -171,15 +237,15 @@ class ClientServiceServicer(object):
 
 def add_ClientServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'postData': grpc.unary_unary_rpc_method_handler(
+            'postData': grpc.stream_unary_rpc_method_handler(
                     servicer.postData,
-                    request_deserializer=RemouteSmartRieltor__pb2.File.FromString,
+                    request_deserializer=RemouteSmartRieltor__pb2.Data.FromString,
                     response_serializer=RemouteSmartRieltor__pb2.Response.SerializeToString,
             ),
-            'getPredict': grpc.unary_unary_rpc_method_handler(
+            'getPredict': grpc.stream_stream_rpc_method_handler(
                     servicer.getPredict,
-                    request_deserializer=RemouteSmartRieltor__pb2.File.FromString,
-                    response_serializer=RemouteSmartRieltor__pb2.Predict.SerializeToString,
+                    request_deserializer=RemouteSmartRieltor__pb2.Booking.FromString,
+                    response_serializer=RemouteSmartRieltor__pb2.StateBooking.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -192,7 +258,7 @@ class ClientService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def postData(request,
+    def postData(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -202,14 +268,14 @@ class ClientService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/example.ClientService/postData',
-            RemouteSmartRieltor__pb2.File.SerializeToString,
+        return grpc.experimental.stream_unary(request_iterator, target, '/example.ClientService/postData',
+            RemouteSmartRieltor__pb2.Data.SerializeToString,
             RemouteSmartRieltor__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def getPredict(request,
+    def getPredict(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -219,8 +285,8 @@ class ClientService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/example.ClientService/getPredict',
-            RemouteSmartRieltor__pb2.File.SerializeToString,
-            RemouteSmartRieltor__pb2.Predict.FromString,
+        return grpc.experimental.stream_stream(request_iterator, target, '/example.ClientService/getPredict',
+            RemouteSmartRieltor__pb2.Booking.SerializeToString,
+            RemouteSmartRieltor__pb2.StateBooking.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

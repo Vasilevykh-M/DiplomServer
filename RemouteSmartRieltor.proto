@@ -2,46 +2,75 @@ syntax = "proto3";
 
 package example;
 
-service EnginerService{
-  rpc postModel(Model) returns (Response) {}
+service EngineerService{
+  rpc postData(stream Data) returns (Response) {}
+  rpc getData(Response) returns (stream Data) {}
   rpc postStat(Stat) returns (Response) {}
-  rpc getData(stream IntervalDate) returns (File) {}
-  rpc postData(File) returns (Response) {}
+  rpc postTorchModel(TorchModel) returns (Response) {}
+  rpc postCatBoostModel(CatBoostModel) returns (Response) {}
 }
 
 service ClientService
 {
-  rpc postData(File) returns (Response) {}
-  rpc getPredict(File) returns (Predict) {}
+  rpc postData(stream Data) returns (Response) {}
+  rpc getPredict(stream Booking) returns (stream StateBooking) {}
+}
+
+message Booking {
+  string BookingDate = 1;
+  string BookingTime = 2;
+  string BookingSource = 3;
+  string BookingTemporary = 4;
+  string City = 5;
+  string TypeRoom = 6;
+  string TypeObject = 7;
+  int32 Area = 8;
+  int32 Floor = 9;
+  int32 Cost = 10;
+  string TypeCost = 11;
+  string PaymentOption = 12;
+  string PaymentOptionAdditional = 13;
+  int32 Discount = 14;
+  int32 ActualCost = 15;
+  string DealAN = 16;
+  string InvestmentProduct = 17;
+  string Privilege = 18;
+  string LeadStatus = 19;
+}
+
+message StateBooking {
+  string StateBooking = 1;
+}
+
+message Data {
+  Booking Booking = 1;
+  StateBooking StateBooking = 2;
+}
+
+message StatFeature {
+  float std = 1;
+  float mean = 2;
+}
+
+message Stat {
+  map<string, StatFeature> Stat = 1;
+}
+
+message Layer {
+  int32 input = 1;
+  int32 output = 2;
+  bool dropout = 3;
+}
+
+message TorchModel {
+  map<string, Layer> layers = 1;
+  bytes weights = 2;
+}
+
+message CatBoostModel {
+  bytes weights = 1;
 }
 
 message Response {
   int32 code = 1;
-}
-
-message File
-{
-  bytes file = 1;
-}
-
-message Model
-{
-  int32 idModel = 1;
-  bytes file = 2;
-}
-
-message Stat
-{
-  bytes stat = 1;
-}
-
-message Predict
-{
-  bytes predict = 1;
-}
-
-message IntervalDate
-{
-  string start_date = 1;
-  string end_date = 2;
 }

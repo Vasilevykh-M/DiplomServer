@@ -13,27 +13,41 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19RemouteSmartRieltor.proto\x12\x07\x65xample\"\x18\n\x08Response\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\"\x14\n\x04\x46ile\x12\x0c\n\x04\x66ile\x18\x01 \x01(\x0c\"&\n\x05Model\x12\x0f\n\x07idModel\x18\x01 \x01(\x05\x12\x0c\n\x04\x66ile\x18\x02 \x01(\x0c\"\x14\n\x04Stat\x12\x0c\n\x04stat\x18\x01 \x01(\x0c\"\x1a\n\x07Predict\x12\x0f\n\x07predict\x18\x01 \x01(\x0c\"4\n\x0cIntervalDate\x12\x12\n\nstart_date\x18\x01 \x01(\t\x12\x10\n\x08\x65nd_date\x18\x02 \x01(\t2\xa7\x01\n\x0e\x45nginerService\x12\x30\n\tpostModel\x12\x0e.example.Model\x1a\x11.example.Response\"\x00\x12.\n\x08postStat\x12\r.example.Stat\x1a\x11.example.Response\"\x00\x12\x33\n\x07getData\x12\x15.example.IntervalDate\x1a\r.example.File\"\x00(\x01\x32p\n\rClientService\x12.\n\x08postData\x12\r.example.File\x1a\x11.example.Response\"\x00\x12/\n\ngetPredict\x12\r.example.File\x1a\x10.example.Predict\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19RemouteSmartRieltor.proto\x12\x07\x65xample\"\x85\x03\n\x07\x42ooking\x12\x13\n\x0b\x42ookingDate\x18\x01 \x01(\t\x12\x13\n\x0b\x42ookingTime\x18\x02 \x01(\t\x12\x15\n\rBookingSource\x18\x03 \x01(\t\x12\x18\n\x10\x42ookingTemporary\x18\x04 \x01(\t\x12\x0c\n\x04\x43ity\x18\x05 \x01(\t\x12\x10\n\x08TypeRoom\x18\x06 \x01(\t\x12\x12\n\nTypeObject\x18\x07 \x01(\t\x12\x0c\n\x04\x41rea\x18\x08 \x01(\x05\x12\r\n\x05\x46loor\x18\t \x01(\x05\x12\x0c\n\x04\x43ost\x18\n \x01(\x05\x12\x10\n\x08TypeCost\x18\x0b \x01(\t\x12\x15\n\rPaymentOption\x18\x0c \x01(\t\x12\x1f\n\x17PaymentOptionAdditional\x18\r \x01(\t\x12\x10\n\x08\x44iscount\x18\x0e \x01(\x05\x12\x12\n\nActualCost\x18\x0f \x01(\x05\x12\x0e\n\x06\x44\x65\x61lAN\x18\x10 \x01(\t\x12\x19\n\x11InvestmentProduct\x18\x11 \x01(\t\x12\x11\n\tPrivilege\x18\x12 \x01(\t\x12\x12\n\nLeadStatus\x18\x13 \x01(\t\"$\n\x0cStateBooking\x12\x14\n\x0cStateBooking\x18\x01 \x01(\t\"V\n\x04\x44\x61ta\x12!\n\x07\x42ooking\x18\x01 \x01(\x0b\x32\x10.example.Booking\x12+\n\x0cStateBooking\x18\x02 \x01(\x0b\x32\x15.example.StateBooking\"(\n\x0bStatFeature\x12\x0b\n\x03std\x18\x01 \x01(\x02\x12\x0c\n\x04mean\x18\x02 \x01(\x02\"p\n\x04Stat\x12%\n\x04Stat\x18\x01 \x03(\x0b\x32\x17.example.Stat.StatEntry\x1a\x41\n\tStatEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.example.StatFeature:\x02\x38\x01\"7\n\x05Layer\x12\r\n\x05input\x18\x01 \x01(\x05\x12\x0e\n\x06output\x18\x02 \x01(\x05\x12\x0f\n\x07\x64ropout\x18\x03 \x01(\x08\"\x8d\x01\n\nTorchModel\x12/\n\x06layers\x18\x01 \x03(\x0b\x32\x1f.example.TorchModel.LayersEntry\x12\x0f\n\x07weights\x18\x02 \x01(\x0c\x1a=\n\x0bLayersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1d\n\x05value\x18\x02 \x01(\x0b\x32\x0e.example.Layer:\x02\x38\x01\" \n\rCatBoostModel\x12\x0f\n\x07weights\x18\x01 \x01(\x0c\"\x18\n\x08Response\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x32\xa2\x02\n\x0f\x45ngineerService\x12\x30\n\x08postData\x12\r.example.Data\x1a\x11.example.Response\"\x00(\x01\x12/\n\x07getData\x12\x11.example.Response\x1a\r.example.Data\"\x00\x30\x01\x12.\n\x08postStat\x12\r.example.Stat\x1a\x11.example.Response\"\x00\x12:\n\x0epostTorchModel\x12\x13.example.TorchModel\x1a\x11.example.Response\"\x00\x12@\n\x11postCatBoostModel\x12\x16.example.CatBoostModel\x1a\x11.example.Response\"\x00\x32~\n\rClientService\x12\x30\n\x08postData\x12\r.example.Data\x1a\x11.example.Response\"\x00(\x01\x12;\n\ngetPredict\x12\x10.example.Booking\x1a\x15.example.StateBooking\"\x00(\x01\x30\x01\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'RemouteSmartRieltor_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _RESPONSE._serialized_start=38
-  _RESPONSE._serialized_end=62
-  _FILE._serialized_start=64
-  _FILE._serialized_end=84
-  _MODEL._serialized_start=86
-  _MODEL._serialized_end=124
-  _STAT._serialized_start=126
-  _STAT._serialized_end=146
-  _PREDICT._serialized_start=148
-  _PREDICT._serialized_end=174
-  _INTERVALDATE._serialized_start=176
-  _INTERVALDATE._serialized_end=228
-  _ENGINERSERVICE._serialized_start=231
-  _ENGINERSERVICE._serialized_end=398
-  _CLIENTSERVICE._serialized_start=400
-  _CLIENTSERVICE._serialized_end=512
+  _STAT_STATENTRY._options = None
+  _STAT_STATENTRY._serialized_options = b'8\001'
+  _TORCHMODEL_LAYERSENTRY._options = None
+  _TORCHMODEL_LAYERSENTRY._serialized_options = b'8\001'
+  _BOOKING._serialized_start=39
+  _BOOKING._serialized_end=428
+  _STATEBOOKING._serialized_start=430
+  _STATEBOOKING._serialized_end=466
+  _DATA._serialized_start=468
+  _DATA._serialized_end=554
+  _STATFEATURE._serialized_start=556
+  _STATFEATURE._serialized_end=596
+  _STAT._serialized_start=598
+  _STAT._serialized_end=710
+  _STAT_STATENTRY._serialized_start=645
+  _STAT_STATENTRY._serialized_end=710
+  _LAYER._serialized_start=712
+  _LAYER._serialized_end=767
+  _TORCHMODEL._serialized_start=770
+  _TORCHMODEL._serialized_end=911
+  _TORCHMODEL_LAYERSENTRY._serialized_start=850
+  _TORCHMODEL_LAYERSENTRY._serialized_end=911
+  _CATBOOSTMODEL._serialized_start=913
+  _CATBOOSTMODEL._serialized_end=945
+  _RESPONSE._serialized_start=947
+  _RESPONSE._serialized_end=971
+  _ENGINEERSERVICE._serialized_start=974
+  _ENGINEERSERVICE._serialized_end=1264
+  _CLIENTSERVICE._serialized_start=1266
+  _CLIENTSERVICE._serialized_end=1392
 # @@protoc_insertion_point(module_scope)
