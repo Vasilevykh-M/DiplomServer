@@ -4,7 +4,7 @@ package example;
 
 service EngineerService{
   rpc postData(stream Data) returns (Response) {}
-  rpc getData(Response) returns (stream Data) {}
+  rpc getData(Response) returns (stream TrainData) {}
   rpc postStat(Stat) returns (Response) {}
   rpc postTorchModel(TorchModel) returns (Response) {}
   rpc postCatBoostModel(CatBoostModel) returns (Response) {}
@@ -45,6 +45,11 @@ message StateBooking {
 message Data {
   Booking Booking = 1;
   StateBooking StateBooking = 2;
+}
+
+message TrainData {
+  Data Data = 1;
+  float KeyRate = 2;
 }
 
 message StatFeature {

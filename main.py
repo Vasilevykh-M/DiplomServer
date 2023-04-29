@@ -9,8 +9,9 @@ from Models.ModelEngineerCatBoost import ModelServerCatBoost
 from Models.ModelEngineerTorchNN import Model_NN
 
 models = {
-    "torch": ModelServerTorchNN("torch", Model_NN(None)),
-    "catboost": ModelServerCatBoost("catboost", 0)
+    "torch": ModelServerTorchNN("torch", Model_NN(None), False),
+    "catboost": ModelServerCatBoost("catboost", 0, False),
+    "stat": {}
 }
 
 def server():

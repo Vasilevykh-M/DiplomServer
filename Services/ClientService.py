@@ -1,7 +1,13 @@
+from datetime import datetime
+
+import pandas as pd
 import psycopg2
+import torch
 
 import RemouteSmartRieltor_pb2_grpc
 import RemouteSmartRieltor_pb2
+from DataSet import DataSet
+
 
 class ClientService(RemouteSmartRieltor_pb2_grpc.ClientService):
 
@@ -30,5 +36,72 @@ class ClientService(RemouteSmartRieltor_pb2_grpc.ClientService):
 
         return RemouteSmartRieltor_pb2.Response(code = 1)
 
+    def convert_data(self, Y):
+        for i in Y:
+            yield RemouteSmartRieltor_pb2.StateBooking(StateBooking="Выйдет" if i != 0 else "Не выйдет")
+
     def getPredict(self, Booking, context):
-        return RemouteSmartRieltor_pb2.Predict(predict =b'a')
+
+        data = {
+            "ДатаБрони": [],
+            "ВремяБрони": [],
+            "ДеньНедели": [],
+            "ИсточникБрони": [],
+            "ВременнаяБронь": [],
+            "Город": [],
+            "ВидПомещения": [],
+            "Тип": [],
+            "ПродаваемаяПлощадь": [],
+            "Этаж": [],
+            "СтоимостьНаДатуБрони": [],
+            "ТипСтоимости": [],
+            "ВариантОплаты": [],
+            "ВариантОплатыДоп": [],
+            "СкидкаНаКвартиру": [],
+            "Скидка%": [],
+            "ФактическаяСтоимостьПомещения": [],
+            "СделкаАН": [],
+            "ИнвестиционныйПродукт": [],
+            "Привилегия": [],
+            "Статус лида (из CRM)": [],
+            "ЦенаЗаКвМетр": []
+        }
+        for i in Booking:
+            data["ДатаБрони"].append(datetime.strptime(i.BookingDate, "%Y-%m-%d %H:%M:%S").month)
+            data["ВремяБрони"].append(datetime.strptime(i.BookingTime, "%H:%M:%S").hour)
+            data["ДеньНедели"].append(datetime.strptime(i.BookingDate, "%Y-%m-%d %H:%M:%S").weekday())
+            data["ИсточникБрони"].append(i.BookingSource)
+            data["ВременнаяБронь"].append(i.BookingTemporary)
+            data["Город"].append(i.City)
+            data["ВидПомещения"].append(i.TypeRoom)
+            data["Тип"].append(i.TypeObject)
+            data["ПродаваемаяПлощадь"].append(i.Area)
+            data["Этаж"].append(i.Floor)
+            data["СтоимостьНаДатуБрони"].append(i.Cost)
+            data["ТипСтоимости"].append(i.TypeCost)
+            data["ВариантОплаты"].append(i.PaymentOption)
+            data["ВариантОплатыДоп"].append(i.PaymentOptionAdditional)
+            data["СкидкаНаКвартиру"].append(i.Discount)
+            data["Скидка%"].append(i.ActualCost / i.Discount if i.Discount != 0 else 0.0)
+            data["ФактическаяСтоимостьПомещения"].append(i.ActualCost)
+            data["СделкаАН"].append(i.DealAN)
+            data["ИнвестиционныйПродукт"].append(i.InvestmentProduct)
+            data["Привилегия"].append(i.Privilege)
+            data["Статус лида (из CRM)"].append(i.LeadStatus)
+            data["ЦенаЗаКвМетр"].append(i.ActualCost / i.Area)
+        df = pd.DataFrame.from_dict(data)
+
+        dataset = DataSet.DataSet(df, self.models["stat"])
+        dataset.pre_data()
+
+        X = dataset.data
+        X = X.to_numpy()
+
+        Y = [0]
+
+        if self.models["torch"].main:
+            Y = torch.max(self.models["torch"].predict(X), 1).indices
+        if self.models["catboost"].main:
+            Y = self.models["catboost"].predict(X)
+
+        return self.convert_data(Y)

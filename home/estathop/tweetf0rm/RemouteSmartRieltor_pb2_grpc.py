@@ -22,7 +22,7 @@ class EngineerServiceStub(object):
         self.getData = channel.unary_stream(
                 '/example.EngineerService/getData',
                 request_serializer=RemouteSmartRieltor__pb2.Response.SerializeToString,
-                response_deserializer=RemouteSmartRieltor__pb2.Data.FromString,
+                response_deserializer=RemouteSmartRieltor__pb2.TrainData.FromString,
                 )
         self.postStat = channel.unary_unary(
                 '/example.EngineerService/postStat',
@@ -85,7 +85,7 @@ def add_EngineerServiceServicer_to_server(servicer, server):
             'getData': grpc.unary_stream_rpc_method_handler(
                     servicer.getData,
                     request_deserializer=RemouteSmartRieltor__pb2.Response.FromString,
-                    response_serializer=RemouteSmartRieltor__pb2.Data.SerializeToString,
+                    response_serializer=RemouteSmartRieltor__pb2.TrainData.SerializeToString,
             ),
             'postStat': grpc.unary_unary_rpc_method_handler(
                     servicer.postStat,
@@ -142,7 +142,7 @@ class EngineerService(object):
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/example.EngineerService/getData',
             RemouteSmartRieltor__pb2.Response.SerializeToString,
-            RemouteSmartRieltor__pb2.Data.FromString,
+            RemouteSmartRieltor__pb2.TrainData.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
