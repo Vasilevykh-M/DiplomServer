@@ -24,6 +24,4 @@ def server():
 
 
 if __name__ == '__main__':
-    #x = threading.Thread(target=get_value_additional_feature)
-    #x.start()
     server()
